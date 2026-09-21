@@ -15,7 +15,7 @@ public static class AuthenticationHelper
     {
         if (LocalAuthentication.IsEnabled(configuration, environment))
         {
-            var cookieName = ".WebAppTemplate.LocalSandbox";
+            var cookieName = ".Grove.LocalSandbox";
             var cookieSuffix = configuration["Auth:LocalCookieSuffix"];
             if (!string.IsNullOrEmpty(cookieSuffix))
             {

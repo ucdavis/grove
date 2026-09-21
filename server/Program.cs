@@ -57,8 +57,8 @@ try
     {
         const string message = "No database connection string configured. Set the DB_CONNECTION environment variable or " +
                                "configure ConnectionStrings:DefaultConnection. For host-based local development use " +
-                               "Server=localhost,14333;Database=AppDb;User ID=sa;Password=LocalDev123!;Encrypt=False;TrustServerCertificate=True;. " +
-                               "Inside the DevContainer use Server=sql,1433;Database=AppDb;User ID=sa;Password=LocalDev123!;Encrypt=False;TrustServerCertificate=True;.";
+                               "Server=localhost,14335;Database=Grove;User ID=sa;Password=LocalDev123!;Encrypt=False;TrustServerCertificate=True;. " +
+                               "Inside the DevContainer use Server=sql,1433;Database=Grove;User ID=sa;Password=LocalDev123!;Encrypt=False;TrustServerCertificate=True;.";
 
         throw new InvalidOperationException(message);
     }
@@ -71,7 +71,10 @@ try
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new() { Title = "GROVE API", Version = "v1" });
+    });
 
     // Configure data protection for auth cookies and related framework secrets.
     // This local key ring assumes one effective app instance. Before scaling out

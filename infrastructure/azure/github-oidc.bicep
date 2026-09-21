@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 @description('Base application name used for generated Azure resource names.')
-param appName string = 'webapp'
+param appName string = 'grove'
 
 @description('GitHub repository in owner/name format.')
 param repository string = 'owner/repository'

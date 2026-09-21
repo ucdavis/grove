@@ -1,3 +1,5 @@
+name: grove_devcontainer
+
 services:
   devcontainer:
     build:
@@ -18,13 +20,14 @@ services:
 
   sql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
     user: root
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "LocalDev123!"
       MSSQL_PID: "Developer" # can also use "Express" but Developer has more features
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "LocalDev123!", "-Q", "SELECT 1"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "LocalDev123!", "-C", "-Q", "SELECT 1", "-b"]
       interval: 6s
       timeout: 4s
       retries: 30
@@ -33,7 +36,7 @@ services:
     networks:
       - dev
     ports:
-      - "14333:1433"
+      - "127.0.0.1:14335:1433"
 
 volumes:
   sql-data:

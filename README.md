@@ -1,6 +1,19 @@
-# Web App Template
+# GROVE
 
-A full-stack web application template featuring a .NET 10 backend with React/Vite frontend, using OIDC authentication with Microsoft Entra ID by default.
+GROVE is a UC Davis application built from [web-app-template](https://github.com/ucdavis/web-app-template), with a .NET 10 backend and React frontend.
+
+## Bootstrap status
+
+- Repository: [ucdavis/grove](https://github.com/ucdavis/grove).
+- Local development uses a dedicated `grove_devcontainer` SQL container on `127.0.0.1:14335`, with database `Grove`.
+- To run before Entra is configured, copy `server/.env.example` to `server/.env` and set `Auth__UseLocal="true"`. Set `DevelopmentData__SeedOnStartup="true"` to load the sample weather records.
+- Entra sign-in and Azure test deployment are pending an app registration. The signed-in Azure account could not create it because of directory permissions.
+- The intended test target is `rg-grove-test` in `UC Davis CAES Test`, using the existing `DefaultPlan2` in `Default-Web-WestUS`. No Grove cloud resources have been deployed.
+- Pushes and pull requests run validation. Automatic test deployment requires the repository variable `AZURE_TEST_READY=true`, after Entra, the GitHub `test` environment, OIDC bootstrap, and Configure Azure are complete.
+- The starter's sample routes, weather schema, and notification examples remain as development references. Replace them as Grove's application features are implemented. Application roles still use the starter's sample policy in `UserService.cs`.
+- GA4, SMTP, and external telemetry are not configured.
+
+See [the customization guide](README.customization.md) for the remaining setup steps.
 
 ## Architecture
 
@@ -16,7 +29,7 @@ A full-stack web application template featuring a .NET 10 backend with React/Vit
 With Docker and Compose installed, choose a unique project name for this checkout or worktree, then run these commands from its root:
 
 ```bash
-export SANDBOX_PROJECT=template-feature-a
+export SANDBOX_PROJECT=grove-sandbox
 export SANDBOX_PORT=5280
 export SANDBOX_MAIL_PORT=8025
 docker compose -p "$SANDBOX_PROJECT" -f .devcontainer/docker-compose.sandbox.yml up --build --wait
@@ -42,8 +55,8 @@ This deletes the sandbox database and local sign-in keys. It does not affect the
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/ucdavis/web-app-template/
-   cd web-app-template
+   git clone https://github.com/ucdavis/grove/
+   cd grove
    ```
 
 2. **Configure authentication before starting**
@@ -104,7 +117,7 @@ _Using the DevContainer is optional, but it will get you the right version of do
    npm run db:up
    ```
 
-   Then open `app.sln`, set the `server` project as the startup project, and press `F5`. `SpaProxy` starts Vite if needed and redirects the browser to the frontend dev server.
+   Then open `grove.sln`, set the `server` project as the startup project, and press `F5`. `SpaProxy` starts Vite if needed and redirects the browser to the frontend dev server.
 
    **Visual Studio Code**:
 
@@ -139,7 +152,7 @@ The backend requires a SQL Server connection string.
 
 Startup always applies migrations. Sample weather data is inserted only when `DevelopmentData__SeedOnStartup=true`, and only if the weather table is empty. The Docker sandbox sets this flag. For ordinary development, opt in through `server/.env` when you want the sample records.
 
-- Outside DevContainer, the default development connection points to the SQL Server container published on `localhost:14333`.
+- Outside DevContainer, the default development connection points to the SQL Server container published on `localhost:14335`.
 - Inside DevContainer, `devcontainer.json` overrides `DB_CONNECTION` to use the internal Docker hostname `sql:1433`.
 
 When you want to specify your own DB connection, provide it by setting the `DB_CONNECTION` environment variable (for example in a `.env` file) or by updating `ConnectionStrings:DefaultConnection` in `appsettings.*.json` (`.env` is recommended)
@@ -150,7 +163,7 @@ To run only the database outside DevContainer:
 npm run db:up
 ```
 
-This runs the `sql` service from `.devcontainer/docker-compose.yml` and exposes SQL Server on `localhost:14333`.
+This runs the `sql` service from `.devcontainer/docker-compose.yml` and exposes SQL Server on `localhost:14335`.
 
 Useful companion commands:
 
@@ -165,20 +178,16 @@ The Docker sandbox enables fictional local users with `Auth__UseLocal=true`, byp
 
 For a new application registration, redirect URIs, and app-specific auth settings, follow [the customization guide](README.customization.md#3-microsoft-entra-id-azure-ad-app-sign-in-setup).
 
-To include the `ucdPersonIAMID` claim shown on the main page, follow [Authentication](https://app.notion.com/p/caes-cru/Authentication-2eae70f674118020ba74e953828d2591?source=copy_link).
+To include the `ucdPersonIAMID` claim in the user profile, follow [Authentication](https://app.notion.com/p/caes-cru/Authentication-2eae70f674118020ba74e953828d2591?source=copy_link).
 
 ### Google Analytics (GA4)
 
-This template includes GA4 wiring:
+GROVE retains the starter's route-change tracking helper:
 
-- GA bootstrap script is in `client/index.html`
+- Add the GA bootstrap script in `client/index.html` when analytics is configured
 - Route-change page view tracking is in `client/src/shared/analytics/AnalyticsListener.tsx`
 
-A placeholder measurement ID is included by default:
-
-- `G-XXXXXXXXXX`
-
-Before using this template in a real app, replace `G-XXXXXXXXXX` in `client/index.html` with your real GA4 measurement ID in **both** places:
+The GA bootstrap script is disabled until GROVE has a real measurement ID. Add the script to `client/index.html` with that ID in both places:
 
 1. `https://www.googletagmanager.com/gtag/js?id=...`
 2. `gtag('config', '...')`
@@ -191,7 +200,7 @@ The health check endpoint (`/health`) is configured to return the status of the 
 
 GitHub Actions is the primary deployment path. Start with the [Azure deployment guide](infrastructure/azure/README.md); it links to the detailed bootstrap instructions and describes the production SQL networking prerequisite.
 
-Cloud deployments are intentionally limited to `test` and `prod`. Before the first cloud deployment, replace placeholder names such as `webapp`, `rg-webapp-test`, and `rg-webapp-prod` with names for your application.
+Cloud deployments use `test` and `prod`, with `APP_NAME=grove` and resource groups `rg-grove-test` and `rg-grove-prod`. Production setup has not been performed.
 
 For GitHub Environments, the one-time OIDC bootstrap, deployment settings sync, local deploy scripts, and first-deploy caveats, see [Azure Deployment Setup](README.customization.md#5-azure-deployment-setup). For the hosting flow and key deployment files, see [Development Architecture](docs/ARCHITECTURE.md#azure-hosting-flow).
 
@@ -240,7 +249,7 @@ After sign-in, `/login?returnUrl=...` accepts only local paths such as `/fetch?s
 
 ### Server tests
 
-- Run `dotnet test` from the repository root to execute the .NET test project included in `app.sln`.
+- Run `dotnet test` from the repository root to execute the .NET test project included in `grove.sln`.
 - Alternatively, target the project directly with `dotnet test tests/server.tests/server.tests.csproj`.
 - The tests use EF Core's in-memory provider (see `tests/server.tests/TestDbContextFactory.cs`) so no SQL Server instance is required.
 
@@ -294,7 +303,7 @@ And as always, after updating dependencies, make sure to run `dotnet build` and 
 ├── infrastructure/azure/    # Azure Bicep templates and local deployment scripts
 ├── .github/workflows/       # CI/CD and reusable Azure App Service deployment workflow
 ├── package.json             # Root dev orchestration scripts
-└── app.sln                  # Visual Studio solution file
+└── grove.sln                  # Visual Studio solution file
 ```
 
 ## Available Scripts
