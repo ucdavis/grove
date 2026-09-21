@@ -91,6 +91,8 @@ _Using the DevContainer is optional, but it will get you the right version of do
 
    With nvm, run `nvm install` and `nvm use` from the repo root to use the supported Node 22 line.
 
+   On macOS, if .NET is installed under `/usr/local/share/dotnet` but `dotnet` is not on your shell's PATH, run `export PATH="/usr/local/share/dotnet:$PATH"` before the commands below.
+
    Install dependencies and start the app:
    ```bash
    npm ci
