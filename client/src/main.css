@@ -8,8 +8,8 @@
   --color-light-bg-300: #e9e9e9;
   --color-main-border: #dfdfdf;
 
-  --color-primary-color: var(--color-ucd-gunrock);
-  --color-secondary-color: var(--color-ucd-gold);
+  --color-primary-color: #022851;
+  --color-secondary-color: #ffbf00;
   --color-accent-color: var(--color-ucd-poppy);
   --color-error-color: var(--color-ucd-doubledecker);
   --color-info-color: var(--color-ucd-putahcreek);
@@ -19,6 +19,7 @@
 
 @plugin "daisyui/theme" {
   name: 'grove';
+  color-scheme: light;
   --color-base-100: var(--color-light-bg-100);
   --color-base-200: var(--color-light-bg-200);
   --color-base-300: var(--color-light-bg-300);
@@ -28,7 +29,7 @@
   --color-primary-content: var(--color-light-font);
 
   --color-secondary: var(--color-secondary-color);
-  --color-secondary-content: var(--color-light-font);
+  --color-secondary-content: var(--color-primary-color);
 
   --color-error: var(--color-error-color);
   --color-error-content: var(--color-light-font);

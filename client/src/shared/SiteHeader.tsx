@@ -14,7 +14,7 @@ export function SiteHeader() {
             <span className="block text-xl font-bold leading-none tracking-tight">
               Grove
             </span>
-            <span className="mt-1 block text-sm text-base-content/70">
+            <span className="mt-1 block text-sm text-base-content/80">
               UC Davis reservations
             </span>
           </span>

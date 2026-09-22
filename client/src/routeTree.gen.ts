@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as authenticatedRouteRouteImport } from './routes/(authenticated)/route'
+import { Route as TempIndexRouteImport } from './routes/temp/index'
 import { Route as authenticatedIndexRouteImport } from './routes/(authenticated)/index'
+import { Route as TempRoomRouteImport } from './routes/temp/room'
+import { Route as TempBuildingRouteImport } from './routes/temp/building'
 import { Route as authenticatedTableExportRouteImport } from './routes/(authenticated)/table-export'
 import { Route as authenticatedStylesRouteImport } from './routes/(authenticated)/styles'
 import { Route as authenticatedNotificationRouteImport } from './routes/(authenticated)/notification'
@@ -28,10 +31,25 @@ const authenticatedRouteRoute = authenticatedRouteRouteImport.update({
   id: '/(authenticated)',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TempIndexRoute = TempIndexRouteImport.update({
+  id: '/temp/',
+  path: '/temp/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authenticatedIndexRoute = authenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => authenticatedRouteRoute,
+} as any)
+const TempRoomRoute = TempRoomRouteImport.update({
+  id: '/temp/room',
+  path: '/temp/room',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TempBuildingRoute = TempBuildingRouteImport.update({
+  id: '/temp/building',
+  path: '/temp/building',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const authenticatedTableExportRoute =
   authenticatedTableExportRouteImport.update({
@@ -74,7 +92,10 @@ export interface FileRoutesByFullPath {
   '/notification': typeof authenticatedNotificationRoute
   '/styles': typeof authenticatedStylesRoute
   '/table-export': typeof authenticatedTableExportRoute
+  '/temp/building': typeof TempBuildingRoute
+  '/temp/room': typeof TempRoomRoute
   '/': typeof authenticatedIndexRoute
+  '/temp': typeof TempIndexRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutRoute
@@ -84,7 +105,10 @@ export interface FileRoutesByTo {
   '/notification': typeof authenticatedNotificationRoute
   '/styles': typeof authenticatedStylesRoute
   '/table-export': typeof authenticatedTableExportRoute
+  '/temp/building': typeof TempBuildingRoute
+  '/temp/room': typeof TempRoomRoute
   '/': typeof authenticatedIndexRoute
+  '/temp': typeof TempIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,7 +120,10 @@ export interface FileRoutesById {
   '/(authenticated)/notification': typeof authenticatedNotificationRoute
   '/(authenticated)/styles': typeof authenticatedStylesRoute
   '/(authenticated)/table-export': typeof authenticatedTableExportRoute
+  '/temp/building': typeof TempBuildingRoute
+  '/temp/room': typeof TempRoomRoute
   '/(authenticated)/': typeof authenticatedIndexRoute
+  '/temp/': typeof TempIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,7 +135,10 @@ export interface FileRouteTypes {
     | '/notification'
     | '/styles'
     | '/table-export'
+    | '/temp/building'
+    | '/temp/room'
     | '/'
+    | '/temp'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -118,7 +148,10 @@ export interface FileRouteTypes {
     | '/notification'
     | '/styles'
     | '/table-export'
+    | '/temp/building'
+    | '/temp/room'
     | '/'
+    | '/temp'
   id:
     | '__root__'
     | '/(authenticated)'
@@ -129,12 +162,18 @@ export interface FileRouteTypes {
     | '/(authenticated)/notification'
     | '/(authenticated)/styles'
     | '/(authenticated)/table-export'
+    | '/temp/building'
+    | '/temp/room'
     | '/(authenticated)/'
+    | '/temp/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   authenticatedRouteRoute: typeof authenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  TempBuildingRoute: typeof TempBuildingRoute
+  TempRoomRoute: typeof TempRoomRoute
+  TempIndexRoute: typeof TempIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,12 +192,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/temp/': {
+      id: '/temp/'
+      path: '/temp'
+      fullPath: '/temp'
+      preLoaderRoute: typeof TempIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(authenticated)/': {
       id: '/(authenticated)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof authenticatedIndexRouteImport
       parentRoute: typeof authenticatedRouteRoute
+    }
+    '/temp/room': {
+      id: '/temp/room'
+      path: '/temp/room'
+      fullPath: '/temp/room'
+      preLoaderRoute: typeof TempRoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/temp/building': {
+      id: '/temp/building'
+      path: '/temp/building'
+      fullPath: '/temp/building'
+      preLoaderRoute: typeof TempBuildingRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(authenticated)/table-export': {
       id: '/(authenticated)/table-export'
@@ -231,6 +291,9 @@ const authenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   authenticatedRouteRoute: authenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  TempBuildingRoute: TempBuildingRoute,
+  TempRoomRoute: TempRoomRoute,
+  TempIndexRoute: TempIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

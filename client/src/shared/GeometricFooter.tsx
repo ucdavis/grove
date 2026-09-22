@@ -1,7 +1,7 @@
 export function GeometricFooter() {
   return (
     <footer
-      className="relative mt-16 overflow-hidden bg-base-100 py-12"
+      className="relative mt-8 overflow-hidden bg-base-100 py-12"
       role="contentinfo"
     >
       <svg
@@ -16,30 +16,30 @@ export function GeometricFooter() {
               cx="84"
               cy="126"
               fill="#ffbf00"
-              r="71.4"
+              r="60.69"
             />
             <circle
               className="footer-gold-sphere footer-float-up"
-              cx="150.5"
-              cy="78.5"
+              cx="140.525"
+              cy="85.625"
               fill="#ffdc00"
               fillOpacity="0.8"
-              r="47.175"
+              r="40.09875"
             />
             <circle
               className="footer-gold-sphere"
-              cx="62"
-              cy="210"
+              cx="65.3"
+              cy="197.4"
               fill="#f18a00"
               fillOpacity="0.8"
-              r="28.05"
+              r="23.8425"
             />
             <circle
               className="footer-gold-sphere footer-float-diagonal"
               cx="83.5"
               cy="11.5"
               fill="#ffbf00"
-              r="9.775"
+              r="8.30875"
             />
           </g>
         </g>
@@ -54,11 +54,12 @@ export function GeometricFooter() {
         >
           <img
             alt="UC Davis College of Agricultural and Environmental Sciences"
-            className="w-64 sm:w-80"
+            className="w-56 sm:w-64"
             src="/caes.svg"
           />
         </a>
-        <p className="text-sm text-base-content">© 2026–2027 Regents of the University of California
+        <p className="text-sm text-base-content">
+          © 2026–2027 Regents of the University of California
         </p>
       </div>
 
@@ -74,31 +75,31 @@ export function GeometricFooter() {
               cx="122.074468"
               cy="78.1303191"
               fill="#002855"
-              rx="66.12367022"
-              ry="66.410771235"
+              rx="56.205119687"
+              ry="56.44915554975"
             />
             <circle
               className="footer-blue-sphere footer-float-left"
-              cx="64.6276596"
-              cy="138.308511"
+              cx="73.24468086"
+              cy="129.281782215"
               fill="#008eaa"
               fillOpacity="0.8"
-              r="34.58776599"
+              r="29.3996010915"
             />
             <circle
               className="footer-blue-sphere"
-              cx="191.489362"
-              cy="44.2819149"
+              cx="180.0771279"
+              cy="49.35917553"
               fill="#0047ba"
               fillOpacity="0.8"
-              r="28.484042555"
+              r="24.21143617175"
             />
             <circle
               className="footer-blue-sphere footer-float-diagonal-reverse"
               cx="16.7553191"
               cy="34.7074468"
               fill="#002855"
-              r="14.242021235"
+              r="12.10571804975"
             />
           </g>
         </g>
