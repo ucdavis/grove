@@ -1,6 +1,7 @@
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  ClockIcon,
   Squares2X2Icon,
   UsersIcon,
 } from '@heroicons/react/24/outline';
@@ -12,8 +13,16 @@ export const Route = createFileRoute('/temp/room')({
 });
 
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const sampleTimes = ['9:00 AM', '11:00 AM', '1:00 PM', '3:00 PM'];
 const availableEquipment = ['Display', 'Video conferencing', 'Whiteboard'];
+const startTimes = Array.from({ length: 37 }, (_, index) => {
+  const totalMinutes = 8 * 60 + index * 15;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const displayHour = hours % 12 || 12;
+
+  return `${displayHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+});
 
 const monthFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'long',
@@ -37,6 +46,11 @@ function TempRoomPage() {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [duration, setDuration] = useState(1);
+  const [repeatType, setRepeatType] = useState('never');
+  const [repeatUnit, setRepeatUnit] = useState('week');
+  const [repeatInterval, setRepeatInterval] = useState(1);
+  const [repeatDays, setRepeatDays] = useState<number[]>([]);
+  const [repeatEnd, setRepeatEnd] = useState('never');
   const [reservationMessage, setReservationMessage] = useState('');
 
   const firstWeekday = new Date(
@@ -92,29 +106,55 @@ function TempRoomPage() {
 
       <article className="overflow-hidden rounded-lg border border-base-300 bg-base-200">
         <header className="border-b-8 border-secondary bg-primary px-6 py-8 text-primary-content sm:px-10 sm:py-10">
-          <p className="text-sm font-semibold tracking-wide text-primary-content/70 uppercase">
-            Resnick Agricultural Innovation Research Center
-          </p>
-          <div className="mt-2 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <h1 className="text-3xl font-semibold sm:text-4xl">Room 1155</h1>
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div>
+              <p className="text-sm font-semibold tracking-wide text-primary-content/70 uppercase">
+                Resnick Agricultural Innovation Research Center
+              </p>
+              <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
+                Room 1155
+              </h1>
 
-            <dl className="flex flex-wrap gap-6">
-              <div className="flex items-start gap-3">
+              <section
+                aria-labelledby="available-equipment-heading"
+                className="mt-8"
+              >
+                <h2
+                  className="text-sm font-bold tracking-wide text-primary-content/70 uppercase"
+                  id="available-equipment-heading"
+                >
+                  Available equipment
+                </h2>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {availableEquipment.map((equipment) => (
+                    <li
+                      className="badge badge-outline border-primary-content/40 text-primary-content"
+                      key={equipment}
+                    >
+                      {equipment}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <dl className="grid grid-cols-3 self-start divide-x divide-primary-content/20 overflow-hidden rounded-lg border border-primary-content/25 bg-primary-content/5">
+              <div className="flex items-start gap-2 px-3 py-4">
                 <Squares2X2Icon
                   aria-hidden="true"
-                  className="h-6 w-6 shrink-0 text-primary-content/70"
+                  className="h-4 w-4 shrink-0 text-primary-content/70"
                 />
                 <div>
                   <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
-                    Room type
+                    Type
                   </dt>
                   <dd className="mt-1">Conference</dd>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2 px-3 py-4">
                 <UsersIcon
                   aria-hidden="true"
-                  className="h-6 w-6 shrink-0 text-primary-content/70"
+                  className="h-4 w-4 shrink-0 text-primary-content/70"
                 />
                 <div>
                   <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
@@ -123,28 +163,19 @@ function TempRoomPage() {
                   <dd className="mt-1">20 people</dd>
                 </div>
               </div>
+              <div className="flex items-start gap-2 px-3 py-4">
+                <ClockIcon
+                  aria-hidden="true"
+                  className="h-4 w-4 shrink-0 text-primary-content/70"
+                />
+                <div>
+                  <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
+                    Hours
+                  </dt>
+                  <dd className="mt-1">8:00 AM–5:00 PM</dd>
+                </div>
+              </div>
             </dl>
-          </div>
-
-          <div className="mt-8">
-            <section aria-labelledby="available-equipment-heading">
-              <h2
-                className="text-sm font-bold tracking-wide text-primary-content/70 uppercase"
-                id="available-equipment-heading"
-              >
-                Available equipment
-              </h2>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {availableEquipment.map((equipment) => (
-                  <li
-                    className="badge badge-outline border-primary-content/40 text-primary-content"
-                    key={equipment}
-                  >
-                    {equipment}
-                  </li>
-                ))}
-              </ul>
-            </section>
           </div>
         </header>
 
@@ -280,29 +311,27 @@ function TempRoomPage() {
                   : 'Select one or more dates on the calendar to begin.'}
               </p>
 
-              <fieldset className="mt-6" disabled={selectedDates.length === 0}>
-                <legend className="text-sm font-semibold text-base-content">
-                  Start time
-                </legend>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  {sampleTimes.map((time) => (
-                    <button
-                      aria-pressed={selectedTime === time}
-                      className={`btn btn-sm ${
-                        selectedTime === time ? 'btn-primary' : 'btn-outline'
-                      }`}
-                      key={time}
-                      onClick={() => {
-                        setSelectedTime(time);
-                        setReservationMessage('');
-                      }}
-                      type="button"
-                    >
+              <label className="mt-6 block text-sm font-semibold text-base-content">
+                Start time
+                <select
+                  className="select mt-2 w-full"
+                  disabled={selectedDates.length === 0}
+                  onChange={(event) => {
+                    setSelectedTime(event.target.value || null);
+                    setReservationMessage('');
+                  }}
+                  value={selectedTime ?? ''}
+                >
+                  <option disabled value="">
+                    Select a start time
+                  </option>
+                  {startTimes.map((time) => (
+                    <option key={time} value={time}>
                       {time}
-                    </button>
+                    </option>
                   ))}
-                </div>
-              </fieldset>
+                </select>
+              </label>
 
               <label className="mt-6 block text-sm font-semibold text-base-content">
                 Duration
@@ -319,6 +348,127 @@ function TempRoomPage() {
                   <option value="3">3 hours</option>
                 </select>
               </label>
+
+              <div className="mt-6">
+                <label className="block text-sm font-semibold text-base-content">
+                  Repeat
+                  <select
+                    className="select mt-2 w-full"
+                    onChange={(event) => {
+                      const nextRepeatType = event.target.value;
+                      setRepeatType(nextRepeatType);
+                      if (
+                        nextRepeatType === 'custom' &&
+                        repeatDays.length === 0
+                      ) {
+                        setRepeatDays([today.getDay()]);
+                      }
+                    }}
+                    value={repeatType}
+                  >
+                    <option value="never">Never</option>
+                    <option value="custom">Custom...</option>
+                  </select>
+                </label>
+
+                {repeatType === 'custom' ? (
+                  <div className="mt-4 space-y-5 rounded-lg border border-base-300 bg-base-200 p-4 sm:p-5">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                      <span className="text-sm font-semibold text-base-content">
+                        Repeats every:
+                      </span>
+                      <label>
+                        <span className="sr-only">Repeat interval</span>
+                        <input
+                          className="input input-sm w-16"
+                          min="1"
+                          onChange={(event) =>
+                            setRepeatInterval(
+                              Math.max(1, Number(event.target.value) || 1)
+                            )
+                          }
+                          type="number"
+                          value={repeatInterval}
+                        />
+                      </label>
+                      <label className="text-sm font-semibold text-base-content">
+                        <span className="sr-only">Repeat frequency</span>
+                        <select
+                          className="select select-sm"
+                          onChange={(event) =>
+                            setRepeatUnit(event.target.value)
+                          }
+                          value={repeatUnit}
+                        >
+                          <option value="day">day(s)</option>
+                          <option value="week">week(s)</option>
+                          <option value="month">month(s)</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    {repeatUnit === 'week' ? (
+                      <fieldset>
+                        <legend className="text-sm font-semibold text-base-content">
+                          On
+                        </legend>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {weekdays.map((day, dayIndex) => {
+                            const isSelected = repeatDays.includes(dayIndex);
+
+                            return (
+                              <button
+                                aria-label={`Repeat on ${day}`}
+                                aria-pressed={isSelected}
+                                className={`btn btn-circle btn-sm ${
+                                  isSelected ? 'btn-primary' : 'btn-outline'
+                                }`}
+                                key={day}
+                                onClick={() => {
+                                  setRepeatDays((currentDays) =>
+                                    currentDays.includes(dayIndex)
+                                      ? currentDays.filter(
+                                          (currentDay) =>
+                                            currentDay !== dayIndex
+                                        )
+                                      : [...currentDays, dayIndex]
+                                  );
+                                }}
+                                type="button"
+                              >
+                                {day.slice(0, 1)}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </fieldset>
+                    ) : null}
+
+                    <label className="block border-t border-base-300 pt-4 text-sm font-semibold text-base-content">
+                      End
+                      <select
+                        className="select select-sm mt-2 w-full"
+                        onChange={(event) => setRepeatEnd(event.target.value)}
+                        value={repeatEnd}
+                      >
+                        <option value="never">Never</option>
+                        <option value="date">On a date</option>
+                        <option value="occurrences">
+                          After a number of occurrences
+                        </option>
+                      </select>
+                    </label>
+
+                    <p className="border-t border-base-300 pt-4 text-xs text-base-content/70">
+                      Repeats every {repeatInterval} {repeatUnit}
+                      {repeatUnit === 'week' && repeatDays.length > 0
+                        ? ` on ${repeatDays.map((day) => weekdays[day]).join(', ')}`
+                        : ''}
+                      {repeatEnd === 'never' ? ', with no end date.' : '.'}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
 
               <div className="mt-6 rounded-lg bg-base-200 p-4 text-sm">
                 <p className="font-semibold text-primary">Your selection</p>

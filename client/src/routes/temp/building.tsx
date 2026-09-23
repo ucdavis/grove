@@ -47,7 +47,7 @@ function TempBuildingPage() {
   });
 
   return (
-    <main className="content-container py-8 sm:py-10">
+    <main className="content-container py-4 sm:py-6">
       <nav
         aria-label="Breadcrumb"
         className="mb-4 text-xs text-base-content/70 uppercase"
