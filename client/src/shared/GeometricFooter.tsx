@@ -1,7 +1,7 @@
 export function GeometricFooter() {
   return (
     <footer
-      className="relative mt-8 overflow-hidden bg-base-100 py-12"
+      className="relative overflow-hidden bg-base-100 py-12"
       role="contentinfo"
     >
       <svg

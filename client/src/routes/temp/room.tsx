@@ -1,5 +1,4 @@
 import {
-  BuildingOffice2Icon,
   ChevronLeftIcon,
   ChevronRightIcon,
   Squares2X2Icon,
@@ -12,12 +11,8 @@ export const Route = createFileRoute('/temp/room')({
   component: TempRoomPage,
 });
 
-const roomDescription =
-  'A flexible conference room for team meetings, presentations, and small events.';
-
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const sampleTimes = ['9:00 AM', '11:00 AM', '1:00 PM', '3:00 PM'];
-const roomFeatures = ['Conference layout', 'Flexible seating', 'Quiet setting'];
 const availableEquipment = ['Display', 'Video conferencing', 'Whiteboard'];
 
 const monthFormatter = new Intl.DateTimeFormat('en-US', {
@@ -39,7 +34,7 @@ function TempRoomPage() {
   const [visibleMonth, setVisibleMonth] = useState(
     () => new Date(today.getFullYear(), today.getMonth(), 1)
   );
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [duration, setDuration] = useState(1);
   const [reservationMessage, setReservationMessage] = useState('');
@@ -63,7 +58,6 @@ function TempRoomPage() {
     setVisibleMonth(
       new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + offset, 1)
     );
-    setSelectedDate(null);
     setSelectedTime(null);
     setReservationMessage('');
   }
@@ -101,69 +95,38 @@ function TempRoomPage() {
           <p className="text-sm font-semibold tracking-wide text-primary-content/70 uppercase">
             Resnick Agricultural Innovation Research Center
           </p>
-          <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Room 1155</h1>
-          <p className="mt-3 max-w-prose text-lg leading-relaxed text-primary-content/90">
-            {roomDescription}
-          </p>
+          <div className="mt-2 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <h1 className="text-3xl font-semibold sm:text-4xl">Room 1155</h1>
 
-          <dl className="mt-8 grid gap-6 sm:grid-cols-3">
-            <div className="flex items-start gap-3">
-              <Squares2X2Icon
-                aria-hidden="true"
-                className="h-6 w-6 shrink-0 text-primary-content/70"
-              />
-              <div>
-                <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
-                  Room type
-                </dt>
-                <dd className="mt-1">Conference</dd>
+            <dl className="flex flex-wrap gap-6">
+              <div className="flex items-start gap-3">
+                <Squares2X2Icon
+                  aria-hidden="true"
+                  className="h-6 w-6 shrink-0 text-primary-content/70"
+                />
+                <div>
+                  <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
+                    Room type
+                  </dt>
+                  <dd className="mt-1">Conference</dd>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <UsersIcon
-                aria-hidden="true"
-                className="h-6 w-6 shrink-0 text-primary-content/70"
-              />
-              <div>
-                <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
-                  Capacity
-                </dt>
-                <dd className="mt-1">20 people</dd>
+              <div className="flex items-start gap-3">
+                <UsersIcon
+                  aria-hidden="true"
+                  className="h-6 w-6 shrink-0 text-primary-content/70"
+                />
+                <div>
+                  <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
+                    Capacity
+                  </dt>
+                  <dd className="mt-1">20 people</dd>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <BuildingOffice2Icon
-                aria-hidden="true"
-                className="h-6 w-6 shrink-0 text-primary-content/70"
-              />
-              <div>
-                <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
-                  Floor
-                </dt>
-                <dd className="mt-1">1st floor</dd>
-              </div>
-            </div>
-          </dl>
+            </dl>
+          </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            <section aria-labelledby="room-features-heading">
-              <h2
-                className="text-sm font-bold tracking-wide text-primary-content/70 uppercase"
-                id="room-features-heading"
-              >
-                Room features
-              </h2>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {roomFeatures.map((feature) => (
-                  <li
-                    className="badge badge-outline border-primary-content/40 text-primary-content"
-                    key={feature}
-                  >
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </section>
+          <div className="mt-8">
             <section aria-labelledby="available-equipment-heading">
               <h2
                 className="text-sm font-bold tracking-wide text-primary-content/70 uppercase"
@@ -189,9 +152,9 @@ function TempRoomPage() {
           <h2 className="text-2xl font-semibold text-primary">
             Reserve this room
           </h2>
-          <p className="mt-2 text-sm text-base-content/70">
-            Choose a date, start time, and duration. Availability shown here is
-            sample data.
+          <p className="mt-2">
+            Choose one or more dates, a start time, and a duration. Availability
+            shown here is sample data.
           </p>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-3">
@@ -204,7 +167,7 @@ function TempRoomPage() {
                   className="text-lg font-semibold text-primary"
                   id="calendar-heading"
                 >
-                  Select a date
+                  Select dates
                 </h3>
                 <div className="flex items-center gap-2">
                   <button
@@ -252,7 +215,9 @@ function TempRoomPage() {
                     dayNumber
                   );
                   const isPast = date < today;
-                  const isSelected = selectedDate?.getTime() === date.getTime();
+                  const isSelected = selectedDates.some(
+                    (selectedDate) => selectedDate.getTime() === date.getTime()
+                  );
                   const isToday = date.getTime() === today.getTime();
 
                   return (
@@ -269,7 +234,24 @@ function TempRoomPage() {
                       disabled={isPast}
                       key={dayNumber}
                       onClick={() => {
-                        setSelectedDate(date);
+                        setSelectedDates((currentDates) => {
+                          const isAlreadySelected = currentDates.some(
+                            (selectedDate) =>
+                              selectedDate.getTime() === date.getTime()
+                          );
+
+                          if (isAlreadySelected) {
+                            return currentDates.filter(
+                              (selectedDate) =>
+                                selectedDate.getTime() !== date.getTime()
+                            );
+                          }
+
+                          return [...currentDates, date].sort(
+                            (firstDate, secondDate) =>
+                              firstDate.getTime() - secondDate.getTime()
+                          );
+                        });
                         setSelectedTime(null);
                         setReservationMessage('');
                       }}
@@ -293,12 +275,12 @@ function TempRoomPage() {
                 Reservation details
               </h3>
               <p className="mt-2 text-sm text-base-content/70">
-                {selectedDate
-                  ? dateFormatter.format(selectedDate)
-                  : 'Select a date on the calendar to begin.'}
+                {selectedDates.length > 0
+                  ? selectedDates.map(dateFormatter.format).join(', ')
+                  : 'Select one or more dates on the calendar to begin.'}
               </p>
 
-              <fieldset className="mt-6" disabled={!selectedDate}>
+              <fieldset className="mt-6" disabled={selectedDates.length === 0}>
                 <legend className="text-sm font-semibold text-base-content">
                   Start time
                 </legend>
@@ -341,15 +323,15 @@ function TempRoomPage() {
               <div className="mt-6 rounded-lg bg-base-200 p-4 text-sm">
                 <p className="font-semibold text-primary">Your selection</p>
                 <p className="mt-2 text-base-content/70">
-                  {selectedDate && selectedTime
-                    ? `${dateFormatter.format(selectedDate)} at ${selectedTime} for ${duration} ${duration === 1 ? 'hour' : 'hours'}`
-                    : 'Choose a date and start time to see your reservation.'}
+                  {selectedDates.length > 0 && selectedTime
+                    ? `${selectedDates.map(dateFormatter.format).join(', ')} at ${selectedTime} for ${duration} ${duration === 1 ? 'hour' : 'hours'}`
+                    : 'Choose one or more dates and a start time to see your reservation.'}
                 </p>
               </div>
 
               <button
                 className="btn btn-secondary mt-6 w-full"
-                disabled={!selectedDate || !selectedTime}
+                disabled={selectedDates.length === 0 || !selectedTime}
                 onClick={() =>
                   setReservationMessage(
                     'Demo only — this reservation was not submitted.'
