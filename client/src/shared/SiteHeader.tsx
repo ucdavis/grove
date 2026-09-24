@@ -1,14 +1,16 @@
+import { Link } from '@tanstack/react-router';
+
 const navigationItems = [
-  ['Find a room', '#find-a-room'],
-  ['My reservation', '#my-reservation'],
-  ['Sign out', '#sign-out'],
+  ['Find resources', '/temp/resources'],
+  ['My reservations', '/temp/reservations'],
+  ['Manage resources', '/temp/admin/resources'],
 ] as const;
 
 export function SiteHeader() {
   return (
     <header className="bg-base-100">
       <div className="content-container flex flex-wrap items-center justify-between gap-4 py-4">
-        <a className="flex items-center gap-3" href="/">
+        <Link className="flex items-center gap-3" to="/temp">
           <img alt="Grove" className="h-10 w-10" src="/grovemark.svg" />
           <span>
             <span className="block text-xl font-bold leading-none tracking-tight">
@@ -18,20 +20,20 @@ export function SiteHeader() {
               UC Davis reservations
             </span>
           </span>
-        </a>
+        </Link>
 
         <nav
           aria-label="Primary navigation"
           className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-medium"
         >
-          {navigationItems.map(([label, href]) => (
-            <a
+          {navigationItems.map(([label, to]) => (
+            <Link
               className="text-base-content/70 transition-colors hover:text-base-content"
-              href={href}
-              key={href}
+              key={to}
+              to={to}
             >
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>

@@ -14,6 +14,7 @@ import { Route as authenticatedRouteRouteImport } from './routes/(authenticated)
 import { Route as TempIndexRouteImport } from './routes/temp/index'
 import { Route as authenticatedIndexRouteImport } from './routes/(authenticated)/index'
 import { Route as TempRoomRouteImport } from './routes/temp/room'
+import { Route as TempReservationsRouteImport } from './routes/temp/reservations'
 import { Route as TempBuildingRouteImport } from './routes/temp/building'
 import { Route as authenticatedTableExportRouteImport } from './routes/(authenticated)/table-export'
 import { Route as authenticatedStylesRouteImport } from './routes/(authenticated)/styles'
@@ -21,6 +22,9 @@ import { Route as authenticatedNotificationRouteImport } from './routes/(authent
 import { Route as authenticatedMeRouteImport } from './routes/(authenticated)/me'
 import { Route as authenticatedFormRouteImport } from './routes/(authenticated)/form'
 import { Route as authenticatedFetchRouteImport } from './routes/(authenticated)/fetch'
+import { Route as TempResourcesIndexRouteImport } from './routes/temp/resources/index'
+import { Route as TempResourcesResourceIdRouteImport } from './routes/temp/resources/$resourceId'
+import { Route as TempAdminResourcesRouteImport } from './routes/temp/admin/resources'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -44,6 +48,11 @@ const authenticatedIndexRoute = authenticatedIndexRouteImport.update({
 const TempRoomRoute = TempRoomRouteImport.update({
   id: '/temp/room',
   path: '/temp/room',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TempReservationsRoute = TempReservationsRouteImport.update({
+  id: '/temp/reservations',
+  path: '/temp/reservations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TempBuildingRoute = TempBuildingRouteImport.update({
@@ -83,6 +92,21 @@ const authenticatedFetchRoute = authenticatedFetchRouteImport.update({
   path: '/fetch',
   getParentRoute: () => authenticatedRouteRoute,
 } as any)
+const TempResourcesIndexRoute = TempResourcesIndexRouteImport.update({
+  id: '/temp/resources/',
+  path: '/temp/resources/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TempResourcesResourceIdRoute = TempResourcesResourceIdRouteImport.update({
+  id: '/temp/resources/$resourceId',
+  path: '/temp/resources/$resourceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TempAdminResourcesRoute = TempAdminResourcesRouteImport.update({
+  id: '/temp/admin/resources',
+  path: '/temp/admin/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
@@ -93,9 +117,13 @@ export interface FileRoutesByFullPath {
   '/styles': typeof authenticatedStylesRoute
   '/table-export': typeof authenticatedTableExportRoute
   '/temp/building': typeof TempBuildingRoute
+  '/temp/reservations': typeof TempReservationsRoute
   '/temp/room': typeof TempRoomRoute
   '/': typeof authenticatedIndexRoute
   '/temp': typeof TempIndexRoute
+  '/temp/admin/resources': typeof TempAdminResourcesRoute
+  '/temp/resources/$resourceId': typeof TempResourcesResourceIdRoute
+  '/temp/resources': typeof TempResourcesIndexRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutRoute
@@ -106,9 +134,13 @@ export interface FileRoutesByTo {
   '/styles': typeof authenticatedStylesRoute
   '/table-export': typeof authenticatedTableExportRoute
   '/temp/building': typeof TempBuildingRoute
+  '/temp/reservations': typeof TempReservationsRoute
   '/temp/room': typeof TempRoomRoute
   '/': typeof authenticatedIndexRoute
   '/temp': typeof TempIndexRoute
+  '/temp/admin/resources': typeof TempAdminResourcesRoute
+  '/temp/resources/$resourceId': typeof TempResourcesResourceIdRoute
+  '/temp/resources': typeof TempResourcesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,9 +153,13 @@ export interface FileRoutesById {
   '/(authenticated)/styles': typeof authenticatedStylesRoute
   '/(authenticated)/table-export': typeof authenticatedTableExportRoute
   '/temp/building': typeof TempBuildingRoute
+  '/temp/reservations': typeof TempReservationsRoute
   '/temp/room': typeof TempRoomRoute
   '/(authenticated)/': typeof authenticatedIndexRoute
   '/temp/': typeof TempIndexRoute
+  '/temp/admin/resources': typeof TempAdminResourcesRoute
+  '/temp/resources/$resourceId': typeof TempResourcesResourceIdRoute
+  '/temp/resources/': typeof TempResourcesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,9 +172,13 @@ export interface FileRouteTypes {
     | '/styles'
     | '/table-export'
     | '/temp/building'
+    | '/temp/reservations'
     | '/temp/room'
     | '/'
     | '/temp'
+    | '/temp/admin/resources'
+    | '/temp/resources/$resourceId'
+    | '/temp/resources'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -149,9 +189,13 @@ export interface FileRouteTypes {
     | '/styles'
     | '/table-export'
     | '/temp/building'
+    | '/temp/reservations'
     | '/temp/room'
     | '/'
     | '/temp'
+    | '/temp/admin/resources'
+    | '/temp/resources/$resourceId'
+    | '/temp/resources'
   id:
     | '__root__'
     | '/(authenticated)'
@@ -163,17 +207,25 @@ export interface FileRouteTypes {
     | '/(authenticated)/styles'
     | '/(authenticated)/table-export'
     | '/temp/building'
+    | '/temp/reservations'
     | '/temp/room'
     | '/(authenticated)/'
     | '/temp/'
+    | '/temp/admin/resources'
+    | '/temp/resources/$resourceId'
+    | '/temp/resources/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   authenticatedRouteRoute: typeof authenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   TempBuildingRoute: typeof TempBuildingRoute
+  TempReservationsRoute: typeof TempReservationsRoute
   TempRoomRoute: typeof TempRoomRoute
   TempIndexRoute: typeof TempIndexRoute
+  TempAdminResourcesRoute: typeof TempAdminResourcesRoute
+  TempResourcesResourceIdRoute: typeof TempResourcesResourceIdRoute
+  TempResourcesIndexRoute: typeof TempResourcesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,6 +263,13 @@ declare module '@tanstack/react-router' {
       path: '/temp/room'
       fullPath: '/temp/room'
       preLoaderRoute: typeof TempRoomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/temp/reservations': {
+      id: '/temp/reservations'
+      path: '/temp/reservations'
+      fullPath: '/temp/reservations'
+      preLoaderRoute: typeof TempReservationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/temp/building': {
@@ -262,6 +321,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedFetchRouteImport
       parentRoute: typeof authenticatedRouteRoute
     }
+    '/temp/resources/': {
+      id: '/temp/resources/'
+      path: '/temp/resources'
+      fullPath: '/temp/resources'
+      preLoaderRoute: typeof TempResourcesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/temp/resources/$resourceId': {
+      id: '/temp/resources/$resourceId'
+      path: '/temp/resources/$resourceId'
+      fullPath: '/temp/resources/$resourceId'
+      preLoaderRoute: typeof TempResourcesResourceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/temp/admin/resources': {
+      id: '/temp/admin/resources'
+      path: '/temp/admin/resources'
+      fullPath: '/temp/admin/resources'
+      preLoaderRoute: typeof TempAdminResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -292,8 +372,12 @@ const rootRouteChildren: RootRouteChildren = {
   authenticatedRouteRoute: authenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   TempBuildingRoute: TempBuildingRoute,
+  TempReservationsRoute: TempReservationsRoute,
   TempRoomRoute: TempRoomRoute,
   TempIndexRoute: TempIndexRoute,
+  TempAdminResourcesRoute: TempAdminResourcesRoute,
+  TempResourcesResourceIdRoute: TempResourcesResourceIdRoute,
+  TempResourcesIndexRoute: TempResourcesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

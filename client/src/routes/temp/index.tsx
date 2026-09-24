@@ -1,191 +1,239 @@
+import {
+  ArrowRightIcon,
+  CalendarDaysIcon,
+  CheckCircleIcon,
+  CubeIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { ResourceCard } from '@/features/reservations/ResourceCard.tsx';
+import {
+  buildings,
+  reservations,
+  resources,
+} from '@/features/reservations/mockData.ts';
 
 export const Route = createFileRoute('/temp/')({
-  component: TempLandingPage,
+  component: ReservationHomePage,
 });
 
-const popularBuildings = [
-  { name: 'Hunt Hall', rooms: 22 },
-  { name: 'Resnick Center', rooms: 55 },
-  { name: 'RMI', rooms: 22 },
-] as const;
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
+  month: 'short',
+  weekday: 'short',
+});
 
-function CalendarIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-6 w-6"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.75"
-      viewBox="0 0 24 24"
-    >
-      <rect height="17" rx="2" width="18" x="3" y="4" />
-      <path d="M7 2v4M17 2v4M3 10h18" />
-    </svg>
-  );
-}
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+  hour: 'numeric',
+  minute: '2-digit',
+});
 
-function TempLandingPage() {
+function ReservationHomePage() {
+  const featuredResources = resources
+    .filter((resource) => resource.availability !== 'unavailable')
+    .slice(0, 3);
+
   return (
     <main className="content-container py-8 sm:py-12">
-      <section
-        aria-labelledby="reservation-search-heading"
-        className="relative isolate overflow-hidden rounded-lg border-b-4 border-secondary bg-primary px-6 py-9 text-primary-content sm:px-10 sm:py-10"
-        id="find-a-room"
-      >
+      <section className="relative isolate overflow-hidden rounded-xl border-b-8 border-secondary bg-primary px-6 py-10 text-primary-content sm:px-10 sm:py-14">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 overflow-hidden"
         >
-          <span className="absolute -top-20 -right-12 h-48 w-48 rounded-full bg-info/20" />
-          <span className="absolute -top-8 right-20 h-24 w-24 rounded-full bg-info/25" />
-          <span className="absolute top-20 right-8 h-10 w-10 rounded-full bg-primary-content/20" />
+          <span className="absolute -top-20 right-0 h-64 w-64 rounded-full bg-info/25" />
+          <span className="absolute right-44 top-12 h-24 w-24 rounded-full bg-secondary/25" />
+          <span className="absolute -bottom-12 right-20 h-48 w-48 rounded-full bg-primary-content/10" />
         </div>
-        <h1
-          className="relative text-2xl font-semibold sm:text-3xl"
-          id="reservation-search-heading"
-        >
-          Reserve a room or space with Grove
-        </h1>
-        <form
-          action="/temp/building"
-          className="relative mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-12 xl:items-end"
-          method="get"
-        >
-          <label className="flex flex-col gap-3 text-base xl:col-span-3">
-            <span>Room or building</span>
-            <input
-              className="input input-lg w-full bg-base-200 text-base-content"
-              defaultValue="Resnick Center"
-              name="building"
-              type="search"
-            />
-          </label>
-          <label className="flex flex-col gap-3 text-base xl:col-span-2">
-            <span>Date</span>
-            <input
-              className="input input-lg w-full bg-base-200 text-base-content"
-              defaultValue="2027-01-23"
-              name="date"
-              type="date"
-            />
-          </label>
-          <label className="flex flex-col gap-3 text-base xl:col-span-2">
-            <span>Start</span>
-            <input
-              className="input input-lg w-full bg-base-200 text-base-content"
-              defaultValue="10:30"
-              name="start"
-              type="time"
-            />
-          </label>
-          <label className="flex flex-col gap-3 text-base xl:col-span-2">
-            <span>Duration</span>
-            <select
-              className="select select-lg w-full bg-base-200 text-base-content"
-              defaultValue="3"
-              name="duration"
-            >
-              <option value="1">1 hour</option>
-              <option value="2">2 hours</option>
-              <option value="3">3 hours</option>
-              <option value="4">4 hours</option>
-            </select>
-          </label>
-          <button
-            className="btn btn-secondary btn-lg w-full sm:col-span-2 xl:col-span-3"
-            type="submit"
-          >
-            View available rooms
-          </button>
-        </form>
+        <div className="relative max-w-3xl">
+          <p className="text-sm font-bold tracking-widest text-secondary uppercase">
+            UC Davis resource reservations
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
+            Find the right place or equipment for your work.
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-primary-content/85">
+            Reserve rooms, shared laboratory benches, and standalone equipment
+            across campus—all in one place.
+          </p>
+          <form className="mt-8 grid gap-3 rounded-lg bg-primary-content/10 p-3 sm:grid-cols-[1fr_auto]">
+            <label className="relative block">
+              <span className="sr-only">Search resources</span>
+              <MagnifyingGlassIcon
+                aria-hidden="true"
+                className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-base-content/60"
+              />
+              <input
+                className="input input-lg w-full bg-base-200 pl-12 text-base-content"
+                placeholder="Search rooms, benches, equipment, or buildings"
+                type="search"
+              />
+            </label>
+            <Link className="btn btn-secondary btn-lg" to="/temp/resources">
+              Search availability
+            </Link>
+          </form>
+        </div>
       </section>
 
-      <section aria-labelledby="popular-buildings-heading" className="mt-12">
-        <h2
-          className="text-sm font-medium tracking-wide text-base-content/75 uppercase"
-          id="popular-buildings-heading"
-        >
-          Popular buildings
-        </h2>
-        <div className="mt-3 grid gap-5 md:grid-cols-3 lg:gap-8">
-          {popularBuildings.map(({ name, rooms }) => (
-            <Link
-              className="group flex min-h-32 flex-col justify-between rounded-lg border border-base-300 bg-base-200 p-5 transition-colors hover:border-primary"
-              key={name}
-              to="/temp/building"
+      <section aria-labelledby="browse-heading" className="mt-12">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-base-content/60 uppercase">
+              Browse by resource
+            </p>
+            <h2
+              className="mt-1 text-2xl font-semibold text-primary"
+              id="browse-heading"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="font-semibold text-base-content group-hover:text-primary">
-                    {name}
-                  </h3>
-                  <p className="mt-1 text-xs leading-snug text-base-content/70 underline underline-offset-2">
-                    1142 Shields Drive
-                    <br />
-                    Davis, CA 95616
-                  </p>
-                </div>
-                <span className="mt-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-secondary">
-                  <CalendarIcon />
+              What do you need to reserve?
+            </h2>
+          </div>
+          <Link className="btn btn-ghost btn-sm" to="/temp/resources">
+            See all resources <ArrowRightIcon aria-hidden="true" className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          {[
+            ['Rooms', 'Meeting, teaching, and collaboration spaces', '32'],
+            ['Benches', 'Shared lab workspaces within teaching labs', '14'],
+            ['Equipment', 'Standalone instruments and event equipment', '67'],
+          ].map(([title, description, count]) => (
+            <Link
+              className="group rounded-lg border border-base-300 bg-base-200 p-5 transition hover:border-primary hover:shadow-sm"
+              key={title}
+              to="/temp/resources"
+            >
+              <div className="flex items-center justify-between">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-secondary">
+                  {title === 'Equipment' ? (
+                    <CubeIcon aria-hidden="true" className="h-5 w-5" />
+                  ) : (
+                    <CalendarDaysIcon aria-hidden="true" className="h-5 w-5" />
+                  )}
                 </span>
+                <span className="text-sm text-base-content/60">{count} available</span>
               </div>
-              <p className="mt-5 text-xs text-base-content">{rooms} rooms</p>
+              <h3 className="mt-5 text-lg font-semibold text-primary">{title}</h3>
+              <p className="mt-1 text-sm leading-6 text-base-content/70">
+                {description}
+              </p>
             </Link>
           ))}
         </div>
       </section>
 
-      <section
-        aria-labelledby="my-reservations-heading"
-        className="mt-8 min-h-96 rounded-lg border border-base-300 bg-base-200 px-5 py-7 sm:mt-10 sm:px-8"
-        id="my-reservation"
-      >
-        <div className="flex items-center gap-4 border-b border-base-300 pb-5">
-          <svg
-            aria-hidden="true"
-            className="h-6 w-6 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.75"
-            viewBox="0 0 24 24"
-          >
-            <path d="M7 2h7l5 5v15H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" />
-            <path d="M14 2v6h5M9 13h6M9 17h6" />
-          </svg>
-          <h2 className="text-xl font-medium" id="my-reservations-heading">
-            My Reservations
-          </h2>
+      <section aria-labelledby="featured-heading" className="mt-14">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-base-content/60 uppercase">
+              Available now
+            </p>
+            <h2
+              className="mt-1 text-2xl font-semibold text-primary"
+              id="featured-heading"
+            >
+              Popular resources
+            </h2>
+          </div>
+          <Link className="link link-primary text-sm" to="/temp/resources">
+            View availability
+          </Link>
         </div>
-        <div className="mt-5 overflow-x-auto">
-          <table className="table w-full min-w-xl text-left text-sm">
-            <caption className="sr-only">Example reservation</caption>
-            <thead>
-              <tr className="text-xs text-base-content uppercase">
-                <th className="font-medium">Room</th>
-                <th className="font-medium">Event type</th>
-                <th className="font-medium">Date</th>
-                <th className="font-medium">Time</th>
-                <th className="text-right font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1155 Hunt</td>
-                <td>Conference</td>
-                <td>11/11/2026</td>
-                <td>8:00 am – 5:00 pm</td>
-                <td className="text-right">Pending</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="mt-5 grid gap-5 lg:grid-cols-3">
+          {featuredResources.map((resource) => (
+            <ResourceCard key={resource.id} resource={resource} />
+          ))}
         </div>
       </section>
+
+      <div className="mt-14 grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
+        <section
+          aria-labelledby="reservations-heading"
+          className="rounded-xl border border-base-300 bg-base-200 p-6 sm:p-8"
+        >
+          <div className="flex items-center justify-between gap-4 border-b border-base-300 pb-5">
+            <div>
+              <p className="text-sm font-semibold tracking-wide text-base-content/60 uppercase">
+                Your schedule
+              </p>
+              <h2
+                className="mt-1 text-xl font-semibold text-primary"
+                id="reservations-heading"
+              >
+                Upcoming reservations
+              </h2>
+            </div>
+            <Link className="btn btn-ghost btn-sm" to="/temp/reservations">
+              View all
+            </Link>
+          </div>
+          <ul className="divide-y divide-base-300">
+            {reservations.slice(0, 2).map((reservation) => (
+              <li
+                className="flex flex-wrap items-center justify-between gap-4 py-5"
+                key={reservation.id}
+              >
+                <div className="flex items-center gap-4">
+                  <span className="flex h-11 w-11 flex-col items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span className="text-xs font-bold uppercase">
+                      {dateFormatter.format(new Date(reservation.start)).split(' ')[0]}
+                    </span>
+                    <span className="text-lg font-bold leading-none">
+                      {new Date(reservation.start).getDate()}
+                    </span>
+                  </span>
+                  <div>
+                    <h3 className="font-semibold">{reservation.resourceName}</h3>
+                    <p className="mt-1 text-sm text-base-content/70">
+                      {reservation.building} ·{' '}
+                      {timeFormatter.format(new Date(reservation.start))}–
+                      {timeFormatter.format(new Date(reservation.end))}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className={`badge ${reservation.status === 'confirmed' ? 'badge-success' : 'badge-warning'}`}
+                >
+                  {reservation.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section
+          aria-labelledby="buildings-heading"
+          className="rounded-xl bg-base-300/60 p-6 sm:p-8"
+        >
+          <p className="text-sm font-semibold tracking-wide text-base-content/60 uppercase">
+            Locations
+          </p>
+          <h2
+            className="mt-1 text-xl font-semibold text-primary"
+            id="buildings-heading"
+          >
+            Campus buildings
+          </h2>
+          <ul className="mt-5 space-y-4">
+            {buildings.map((building) => (
+              <li className="rounded-lg bg-base-200 p-4" key={building.code}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-semibold">{building.name}</h3>
+                    <p className="mt-1 text-sm text-base-content/70">
+                      {building.resourceCount} reservable resources
+                    </p>
+                  </div>
+                  <CheckCircleIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 shrink-0 text-success"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </main>
   );
 }

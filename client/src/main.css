@@ -10,11 +10,12 @@
 
   --color-primary-color: #022851;
   --color-secondary-color: #ffbf00;
-  --color-accent-color: var(--color-ucd-poppy);
-  --color-error-color: var(--color-ucd-doubledecker);
-  --color-info-color: var(--color-ucd-putahcreek);
-  --color-success-color: var(--color-ucd-quad);
-  --color-warning-color: #cd9400;
+  --color-accent-color: var(--color-ucd-tahoe);
+  --color-error-color: var(--color-ucd-strawberry);
+  --color-info-color: var(--color-ucd-arboretum);
+  --color-neutral-color: var(--color-ucd-redbud);
+  --color-success-color: var(--color-ucd-sage);
+  --color-warning-color: var(--color-ucd-sunflower);
 }
 
 @plugin "daisyui/theme" {
@@ -32,19 +33,22 @@
   --color-secondary-content: var(--color-primary-color);
 
   --color-error: var(--color-error-color);
-  --color-error-content: var(--color-light-font);
+  --color-error-content: var(--color-dark-font);
 
   --color-info: var(--color-info-color);
-  --color-info-content: var(--color-light-font);
+  --color-info-content: var(--color-dark-font);
 
   --color-accent: var(--color-accent-color);
-  --color-accent-content: var(--color-light-font);
+  --color-accent-content: var(--color-dark-font);
 
   --color-success: var(--color-success-color);
-  --color-success-content: var(--color-light-font);
+  --color-success-content: var(--color-dark-font);
 
   --color-warning: var(--color-warning-color);
-  --color-warning-content: var(--color-light-font);
+  --color-warning-content: var(--color-dark-font);
+
+  --color-neutral: var(--color-neutral-color);
+  --color-neutral-content: var(--color-light-font);
 }
 
 html,
