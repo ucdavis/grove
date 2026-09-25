@@ -33,7 +33,7 @@
   --color-secondary-content: var(--color-primary-color);
 
   --color-error: var(--color-error-color);
-  --color-error-content: var(--color-dark-font);
+  --color-error-content: var(--color-light-bg-200);
 
   --color-info: var(--color-info-color);
   --color-info-content: var(--color-dark-font);

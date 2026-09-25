@@ -34,7 +34,7 @@ function ReservationHomePage() {
     .slice(0, 3);
 
   return (
-    <main className="content-container py-8 sm:py-12">
+    <main className="content-container py-4 sm:py-8">
       <section className="relative isolate overflow-hidden rounded-xl border-b-8 border-secondary bg-primary px-6 py-10 text-primary-content sm:px-10 sm:py-14">
         <div
           aria-hidden="true"
@@ -45,15 +45,9 @@ function ReservationHomePage() {
           <span className="absolute -bottom-12 right-20 h-48 w-48 rounded-full bg-primary-content/10" />
         </div>
         <div className="relative max-w-3xl">
-          <p className="text-sm font-bold tracking-widest text-secondary uppercase">
-            UC Davis resource reservations
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Find the right place or equipment for your work.
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-primary-content/85">
+          <p className="mt-3 text-xl font-semibold tracking-tight sm:text-3xl">
             Reserve rooms, shared laboratory benches, and standalone equipment
-            across campus—all in one place.
+            across campus.
           </p>
           <form className="mt-8 grid gap-3 rounded-lg bg-primary-content/10 p-3 sm:grid-cols-[1fr_auto]">
             <label className="relative block">

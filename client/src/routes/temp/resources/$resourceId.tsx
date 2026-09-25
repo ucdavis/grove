@@ -2,6 +2,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ClockIcon,
+  MapPinIcon,
   Squares2X2Icon,
   UsersIcon,
 } from '@heroicons/react/24/outline';
@@ -130,10 +131,10 @@ function ResourceReservationPage() {
 
       <article className="overflow-hidden rounded-lg border border-base-300 bg-base-200">
         <header className="border-b-8 border-secondary bg-primary px-6 py-8 text-primary-content sm:px-10 sm:py-10">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div>
+          <div className="grid gap-8 lg:grid-cols-5">
+            <div className="lg:col-span-2">
               <p className="text-sm font-semibold tracking-wide text-primary-content/70 uppercase">
-                {resource.building} · {resource.floor}
+                {resource.building}
               </p>
               <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">
                 {resource.name}
@@ -144,7 +145,7 @@ function ResourceReservationPage() {
                   className="text-sm font-bold tracking-wide text-primary-content/70 uppercase"
                   id="included-features-heading"
                 >
-                  Included features
+                  Resource features
                 </h2>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {resource.features.map((feature) => (
@@ -159,7 +160,19 @@ function ResourceReservationPage() {
               </section>
             </div>
 
-            <dl className="grid grid-cols-3 self-start divide-x divide-primary-content/20 overflow-hidden rounded-lg border border-primary-content/25 bg-primary-content/5">
+            <dl className="grid grid-cols-2 self-start divide-x divide-primary-content/20 overflow-hidden rounded-lg border border-primary-content/25 bg-primary-content/5 sm:grid-cols-4 lg:col-span-3">
+              <div className="flex items-start gap-2 px-3 py-4">
+                <MapPinIcon
+                  aria-hidden="true"
+                  className="h-4 w-4 shrink-0 text-primary-content/70"
+                />
+                <div>
+                  <dt className="text-sm font-bold tracking-wide text-primary-content/70 uppercase">
+                    Building
+                  </dt>
+                  <dd className="mt-1 font-medium">{resource.building}</dd>
+                </div>
+              </div>
               <div className="flex items-start gap-2 px-3 py-4">
                 <Squares2X2Icon
                   aria-hidden="true"

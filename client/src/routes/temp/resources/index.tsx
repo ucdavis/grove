@@ -43,7 +43,7 @@ function ResourceDirectoryPage() {
   );
 
   return (
-    <main className="content-container py-8 sm:py-12">
+    <main className="content-container py-4 sm:py-8">
       <nav aria-label="Breadcrumb" className="mb-5 text-sm text-base-content/65">
         <Link className="hover:text-primary hover:underline" to="/temp">
           Home
@@ -53,7 +53,6 @@ function ResourceDirectoryPage() {
       </nav>
 
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold tracking-wide text-primary uppercase">Resource directory</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-primary sm:text-4xl">Find available resources</h1>
         <p className="mt-3 text-lg leading-7 text-base-content/70">Search reservable rooms, lab benches, and equipment. Every result includes its building and location details.</p>
       </div>

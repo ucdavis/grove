@@ -8,7 +8,7 @@ export const Route = createFileRoute('/temp/admin/resources')({
 
 function ManageResourcesPage() {
   return (
-    <main className="content-container py-8 sm:py-12">
+    <main className="content-container py-4 sm:py-8">
       <nav aria-label="Breadcrumb" className="mb-5 text-sm text-base-content/65">
         <Link className="hover:text-primary hover:underline" to="/temp">Home</Link>{' '}
         <span aria-hidden="true">/</span>{' '}
@@ -41,7 +41,7 @@ function ManageResourcesPage() {
                   <td>{resource.building}</td>
                   <td>{resource.parentName ?? resource.floor ?? '—'}</td>
                   <td className="text-sm">{resource.trainingRequired ? 'Training' : resource.requiresApproval ? 'Approval' : 'None'}</td>
-                  <td><span className={`badge badge-sm ${resource.availability === 'available' ? 'badge-success' : resource.availability === 'limited' ? 'badge-warning' : 'badge-neutral'}`}>{resource.availability}</span></td>
+                  <td><span className={`badge badge-sm ${resource.availability === 'available' ? 'badge-success' : resource.availability === 'limited' ? 'badge-warning' : 'badge-error'}`}>{resource.availability}</span></td>
                   <td><Link className="btn btn-ghost btn-sm" params={{ resourceId: resource.id }} to="/temp/resources/$resourceId">Edit</Link></td>
                 </tr>
               ))}

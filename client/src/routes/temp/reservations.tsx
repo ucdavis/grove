@@ -20,7 +20,7 @@ const timeFormatter = new Intl.DateTimeFormat('en-US', {
 
 function MyReservationsPage() {
   return (
-    <main className="content-container py-8 sm:py-12">
+    <main className="content-container py-4 sm:py-8">
       <nav aria-label="Breadcrumb" className="mb-5 text-sm text-base-content/65">
         <Link className="hover:text-primary hover:underline" to="/temp">Home</Link>{' '}
         <span aria-hidden="true">/</span>{' '}

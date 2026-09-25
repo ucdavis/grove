@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="bg-base-100">
       <div className="content-container flex flex-wrap items-center justify-between gap-4 py-4">
         <Link className="flex items-center gap-3" to="/temp">
-          <img alt="Grove" className="h-10 w-10" src="/grovemark.svg" />
+          <img alt="Grove" className="h-10 w-auto" src="/grove-logo.svg" />
           <span>
             <span className="block text-xl font-bold leading-none tracking-tight">
               Grove

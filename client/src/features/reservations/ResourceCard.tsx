@@ -19,7 +19,7 @@ const kindIcons: Record<ResourceKind, typeof BuildingOffice2Icon> = {
 const availabilityStyles = {
   available: 'badge-success',
   limited: 'badge-warning',
-  unavailable: 'badge-neutral',
+  unavailable: 'badge-error',
 } as const;
 
 export function ResourceCard({ resource }: { resource: Resource }) {
