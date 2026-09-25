@@ -3,11 +3,19 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { RouterContext } from '../main.tsx';
 import { AnalyticsListener } from '@/shared/analytics/AnalyticsListener.tsx';
+import { GeometricFooter } from '@/shared/GeometricFooter.tsx';
+import { SiteHeader } from '@/shared/SiteHeader.tsx';
 
 const RootLayout = () => (
   <>
     <AnalyticsListener />
-    <Outlet />
+    <div className="flex min-h-dvh flex-col">
+      <SiteHeader />
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      <GeometricFooter />
+    </div>
     {import.meta.env.DEV && (
       <>
         <ReactQueryDevtools buttonPosition="top-right" />
